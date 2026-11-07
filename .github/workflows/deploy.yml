@@ -49,18 +49,10 @@ jobs:
           name: web-dist
           path: build/web
 
-  deploy-pages:
+  deploy-gh-pages:
     needs: build
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Deploy to GitHub Pages (Actions Mode)
-        id: deployment
-        uses: actions/deploy-pages@v4
-        continue-on-error: true
-
       - name: Checkout Repository
         uses: actions/checkout@v4
 
@@ -70,7 +62,7 @@ jobs:
           name: web-dist
           path: build/web
 
-      - name: Deploy to gh-pages Branch (Branch Mode)
+      - name: Deploy to gh-pages Branch
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
