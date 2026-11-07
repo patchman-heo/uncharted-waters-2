@@ -27,6 +27,17 @@
 
 ---
 
+## 🌐 웹 버전 (Web / GitHub Pages)
+
+본 프로젝트는 최신 **Godot 4.3 WebAssembly / WebGL 2.0 (GL Compatibility Single-Thread)** 모드를 완벽 지원합니다.
+저장소에 푸시하면 GitHub Actions 워크플로우(`.github/workflows/deploy.yml`)가 자동으로 웹 버전을 빌드하여 **GitHub Pages**에 무료로 호스팅/배포합니다.
+
+* 별도 설치 없이 PC 및 모바일 최신 웹 브라우저에서 바로 플레이 가능
+* 게임 저장 데이터(F5 퀵세이브 등)는 브라우저 IndexedDB에 안전하게 영구 보존
+* 라이브 주소: `https://<github-username>.github.io/<repository-name>/`
+
+---
+
 ## 🚀 실행 방법 (Getting Started)
 
 ### 요구 사양

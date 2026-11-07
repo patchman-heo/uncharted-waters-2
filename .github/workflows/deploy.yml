@@ -1,0 +1,74 @@
+name: "Deploy Godot 4 Web to GitHub Pages"
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: barichello/godot-ci:4.3
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          lfs: false
+
+      - name: Setup Export Templates
+        run: |
+          mkdir -v -p ~/.local/share/godot/export_templates/
+          mkdir -v -p ~/.config/
+          mv /root/.config/godot ~/.config/godot 2>/dev/null || true
+          mv /root/.local/share/godot/export_templates/4.3.stable ~/.local/share/godot/export_templates/4.3.stable
+
+      - name: Build Web Export
+        run: |
+          mkdir -v -p build/web
+          godot --headless --verbose --export-release "Web" build/web/index.html
+
+      - name: Upload Web Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/web
+
+      - name: Archive Web Build for gh-pages Branch
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-dist
+          path: build/web
+
+  deploy-pages:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages (Actions Mode)
+        id: deployment
+        uses: actions/deploy-pages@v4
+        continue-on-error: true
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Download Web Build
+        uses: actions/download-artifact@v4
+        with:
+          name: web-dist
+          path: build/web
+
+      - name: Deploy to gh-pages Branch (Branch Mode)
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: build/web

@@ -237,10 +237,9 @@ func _load_all_data() -> void:
 	ship_sprites_tex = _load_png_texture("res://assets/sprites/worldmap_ships.png")
 	hangul_font_tex = _load_png_texture("res://assets/fonts/all_font_16p_atlas.png")
 
-	var font_abs_path := ProjectSettings.globalize_path("res://assets/fonts/korean_font.ttf")
-	if FileAccess.file_exists(font_abs_path):
+	if FileAccess.file_exists("res://assets/fonts/korean_font.ttf"):
 		korean_font = FontFile.new()
-		korean_font.load_dynamic_font(font_abs_path)
+		korean_font.data = FileAccess.get_file_as_bytes("res://assets/fonts/korean_font.ttf")
 
 	for i in range(7):
 		char_sprite_textures[i] = _load_png_texture("res://assets/sprites/char_%d.png" % i)
@@ -348,11 +347,17 @@ func _load_json(path: String) -> Variant:
 
 
 func _load_png_texture(path: String) -> Texture2D:
-	# Load directly via Image.load_from_file so it works immediately even without .import files
-	var abs_path := ProjectSettings.globalize_path(path)
-	var img := Image.load_from_file(abs_path)
-	if img == null or img.is_empty():
-		push_error("Failed to load PNG image: " + abs_path)
+	if not FileAccess.file_exists(path):
+		push_error("File not found: " + path)
+		return null
+	var bytes := FileAccess.get_file_as_bytes(path)
+	if bytes.is_empty():
+		push_error("Empty PNG file: " + path)
+		return null
+	var img := Image.new()
+	var err := img.load_png_from_buffer(bytes)
+	if err != OK or img.is_empty():
+		push_error("Failed to load PNG buffer: " + path)
 		return null
 	return ImageTexture.create_from_image(img)
 
