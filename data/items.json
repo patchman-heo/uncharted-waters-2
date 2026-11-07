@@ -1,0 +1,902 @@
+[
+  {
+    "id": 0,
+    "name": "단검",
+    "category": 0,
+    "pic_id": 0,
+    "effect_value": 5,
+    "price": 500,
+    "description": "칼날 길이 약 ２０센티미터 정도인 작은 호신용 무기. 가볍고 활용성이 좋아 가장 널리 사용되는 무기이다."
+  },
+  {
+    "id": 1,
+    "name": "소검",
+    "category": 0,
+    "pic_id": 1,
+    "effect_value": 10,
+    "price": 1000,
+    "description": "전체 길이 약 ８０센티미터 정도의 짧은 검. 다루기가 쉽고 비싸지 않아 다방면의 전투에 적합한 무기이다."
+  },
+  {
+    "id": 2,
+    "name": "장검",
+    "category": 0,
+    "pic_id": 2,
+    "effect_value": 20,
+    "price": 4000,
+    "description": "칼날 길이가 １미터 정도인 다목적 검. 중세의 기사들 사이에서 가장 널리 애용된 무기이다."
+  },
+  {
+    "id": 3,
+    "name": "레이피어",
+    "category": 1,
+    "pic_id": 3,
+    "effect_value": 15,
+    "price": 3000,
+    "description": "가늘고 화려하며, 찌르기에 특화된 검. 총이 유용하게 활용되면서 두꺼운 갑옷이 쇠퇴함에 따라 등장했다."
+  },
+  {
+    "id": 4,
+    "name": "에페",
+    "category": 1,
+    "pic_id": 3,
+    "effect_value": 10,
+    "price": 2000,
+    "description": "검신이 얇아 찌르기 위주로 특화된 검. 주로 귀족들이 연습용 결투에 활용했다."
+  },
+  {
+    "id": 5,
+    "name": "에스터크",
+    "category": 1,
+    "pic_id": 3,
+    "effect_value": 20,
+    "price": 6000,
+    "description": "마상에서 갑옷을 뚫기 위해 만든 검. 검이라기보다는 송곳에 가까운 형태이며, 찌르기에 특화되어 있다."
+  },
+  {
+    "id": 6,
+    "name": "짧은 사브르",
+    "category": 2,
+    "pic_id": 5,
+    "effect_value": 10,
+    "price": 3000,
+    "description": "끝이 휘어 있는, 한 손으로 쓰는 칼. 중동 기병들 간의 근접전에서 활용되었다."
+  },
+  {
+    "id": 7,
+    "name": "시미터",
+    "category": 2,
+    "pic_id": 6,
+    "effect_value": 20,
+    "price": 8000,
+    "description": "중동에서 사용하는 곡도. 전체적으로 휘어진 칼날이 특징적이며, 베기 공격에 적합하다."
+  },
+  {
+    "id": 8,
+    "name": "일본도",
+    "category": 2,
+    "pic_id": 7,
+    "effect_value": 25,
+    "price": 20000,
+    "description": "지팡구에서 무사들이 쓰는 전통 도검. 칼날이 예리해 베기 공격에 적합하다."
+  },
+  {
+    "id": 9,
+    "name": "커틀라스",
+    "category": 3,
+    "pic_id": 8,
+    "effect_value": 10,
+    "price": 1500,
+    "description": "칼날 폭이 ２∼４센티미터 정도 되는 두꺼운 외날도. 함상에서 백병전을 할 때 사용되었다."
+  },
+  {
+    "id": 10,
+    "name": "넓은 검",
+    "category": 3,
+    "pic_id": 9,
+    "effect_value": 20,
+    "price": 5000,
+    "description": "칼날 폭이 넓은 대형 검. 파괴력이 강해 내려치기에 특화된 무기이다."
+  },
+  {
+    "id": 11,
+    "name": "청룡언월도",
+    "category": 3,
+    "pic_id": 10,
+    "effect_value": 30,
+    "price": 24000,
+    "description": "키타이(중국) 특유의 칼날 폭이 넓고 예리한 반월형 칼. 매우 무겁고 휘둘렀을 때의 공격력은 최상이다."
+  },
+  {
+    "id": 12,
+    "name": "플람베르크",
+    "category": 1,
+    "pic_id": 4,
+    "effect_value": 25,
+    "price": 14000,
+    "description": "물결치는 양날이 돋보이는 장검. 의례나 장식용으로 사용되었으나, 실전에서의 성능 또한 매우 뛰어나다."
+  },
+  {
+    "id": 13,
+    "name": "변종검",
+    "category": 0,
+    "pic_id": 2,
+    "effect_value": 25,
+    "price": 14000,
+    "description": "상황에 따라서 한 손 또는 양손 어느 쪽으로도 사용 가능한 검. 유연한 검술을 펼칠 수 있고, 공격력 또한 탁월하다."
+  },
+  {
+    "id": 14,
+    "name": "클레이모어",
+    "category": 3,
+    "pic_id": 9,
+    "effect_value": 25,
+    "price": 15000,
+    "description": "스코틀랜드의 고지민족이 애용한, 넓고 거대한 검. 무게가 약 ３킬로그램 정도 나가며, 치기 공격에 아주 적합하다."
+  },
+  {
+    "id": 15,
+    "name": "사브르",
+    "category": 2,
+    "pic_id": 5,
+    "effect_value": 15,
+    "price": 3000,
+    "description": "기마병이 한 손으로 쓰며, 난전에 특화된 곡도. 마상 기동전을 할 때 주력으로 활용되던 무기이다."
+  },
+  {
+    "id": 16,
+    "name": "가죽 갑옷",
+    "category": 6,
+    "pic_id": 11,
+    "effect_value": 10,
+    "price": 1000,
+    "description": "수유로 경화 처리 작업한, 단단한 가죽옷. 무두질의 발달로 등장한 품질 좋은 피혁의 가죽 방어구이다."
+  },
+  {
+    "id": 17,
+    "name": "사슬 갑옷",
+    "category": 6,
+    "pic_id": 12,
+    "effect_value": 20,
+    "price": 2000,
+    "description": "작은 금속 고리를 촘촘하게 엮어 만든 갑옷. 단단하고 유연한데다, 실전성이 높은 방어구이다."
+  },
+  {
+    "id": 18,
+    "name": "경장 판금 갑옷",
+    "category": 6,
+    "pic_id": 13,
+    "effect_value": 30,
+    "price": 4000,
+    "description": "상반신 부위만을 판금으로 보호한 갑옷. 좁은 공간의 함상 백병전에서 유용하게 사용되었다."
+  },
+  {
+    "id": 19,
+    "name": "판금 갑옷",
+    "category": 6,
+    "pic_id": 14,
+    "effect_value": 40,
+    "price": 8000,
+    "description": "사슬 갑옷을 기본으로 한, 주요 부위 전체를 판금으로 보호한 갑옷. 매우 우수한 방어력을 자랑한다."
+  },
+  {
+    "id": 20,
+    "name": "사분의",
+    "category": 7,
+    "pic_id": 15,
+    "effect_value": 5,
+    "price": 4000,
+    "description": "위도와 경도를 측량하는 데 사용하는 기구. 정밀도는 낮은 편이다."
+  },
+  {
+    "id": 21,
+    "name": "육분의",
+    "category": 7,
+    "pic_id": 16,
+    "effect_value": 2,
+    "price": 8000,
+    "description": "위도와 경도를 측량하는 데 사용하는 기구. 정밀도는 적당한 편이다."
+  },
+  {
+    "id": 22,
+    "name": "경위의",
+    "category": 7,
+    "pic_id": 17,
+    "effect_value": 1,
+    "price": 12000,
+    "description": "위도와 경도를 측량하는 데 사용하는 기구. 정밀도가 아주 높다."
+  },
+  {
+    "id": 23,
+    "name": "회중시계",
+    "category": 8,
+    "pic_id": 18,
+    "effect_value": 1,
+    "price": 2000,
+    "description": "가지고 다니기 편리한 소형 시계. 정확한 시간을 알 수 있게 해 준다."
+  },
+  {
+    "id": 24,
+    "name": "망원경",
+    "category": 8,
+    "pic_id": 19,
+    "effect_value": 1,
+    "price": 5000,
+    "description": "먼 곳의 사물을 관측하기 위한 항해 용구. 해상에서 발견 확률이 상승한다."
+  },
+  {
+    "id": 25,
+    "name": "고양이",
+    "category": 8,
+    "pic_id": 20,
+    "effect_value": 1,
+    "price": 2000,
+    "description": "작고 날쌘 애완동물. 쥐를 사냥하여 잡아먹는다."
+  },
+  {
+    "id": 26,
+    "name": "백호반월도",
+    "category": 3,
+    "pic_id": 10,
+    "effect_value": 25,
+    "price": 18000,
+    "description": "키타이(중국) 특유의 칼날 폭이 넓은 무기. 곡선형의 묵직한 날붙이를 활용하여 강한 타격을 줄 수 있다."
+  },
+  {
+    "id": 27,
+    "name": "공백",
+    "category": 9,
+    "pic_id": 42,
+    "effect_value": 0,
+    "price": 0,
+    "description": "예비"
+  },
+  {
+    "id": 28,
+    "name": "공백",
+    "category": 9,
+    "pic_id": 42,
+    "effect_value": 0,
+    "price": 0,
+    "description": "예비"
+  },
+  {
+    "id": 29,
+    "name": "사략허가서(P)",
+    "category": 8,
+    "pic_id": 24,
+    "effect_value": 0,
+    "price": 0,
+    "description": "타국 선박 나포 면장.\n[포르투갈 발행]"
+  },
+  {
+    "id": 30,
+    "name": "사략허가서(S)",
+    "category": 8,
+    "pic_id": 24,
+    "effect_value": 0,
+    "price": 0,
+    "description": "타국 선박 나포 면장.\n[에스파니아 발행]"
+  },
+  {
+    "id": 31,
+    "name": "사략허가서(O)",
+    "category": 8,
+    "pic_id": 24,
+    "effect_value": 0,
+    "price": 0,
+    "description": "타국 선박 나포 면장.\n[오스만제국 발행]"
+  },
+  {
+    "id": 32,
+    "name": "사략허가서(E)",
+    "category": 8,
+    "pic_id": 24,
+    "effect_value": 0,
+    "price": 0,
+    "description": "타국 선박 나포 면장.\n[영국 발행]"
+  },
+  {
+    "id": 33,
+    "name": "사략허가서(I)",
+    "category": 8,
+    "pic_id": 24,
+    "effect_value": 0,
+    "price": 0,
+    "description": "타국 선박 나포 면장.\n[이탈리아 발행]"
+  },
+  {
+    "id": 34,
+    "name": "사략허가서(H)",
+    "category": 8,
+    "pic_id": 24,
+    "effect_value": 0,
+    "price": 0,
+    "description": "타국 선박 나포 면장.\n[네덜란드 발행]"
+  },
+  {
+    "id": 35,
+    "name": "면세증(P)",
+    "category": 8,
+    "pic_id": 25,
+    "effect_value": 0,
+    "price": 10000,
+    "description": "자국 영토 내에서의 상품 구입에 대한 면세를 승인한 증명서.\n[포르투갈 발행]"
+  },
+  {
+    "id": 36,
+    "name": "면세증(S)",
+    "category": 8,
+    "pic_id": 25,
+    "effect_value": 0,
+    "price": 10000,
+    "description": "자국 영토 내에서의 상품 구입에 대한 면세를 승인한 증명서.\n[에스파니아 발행]"
+  },
+  {
+    "id": 37,
+    "name": "면세증(O)",
+    "category": 8,
+    "pic_id": 25,
+    "effect_value": 0,
+    "price": 10000,
+    "description": "자국 영토 내에서의 상품 구입에 대한 면세를 승인한 증명서.\n[오스만제국 발행]"
+  },
+  {
+    "id": 38,
+    "name": "면세증(E)",
+    "category": 8,
+    "pic_id": 25,
+    "effect_value": 0,
+    "price": 10000,
+    "description": "자국 영토 내에서의 상품 구입에 대한 면세를 승인한 증명서.\n[영국 발행]"
+  },
+  {
+    "id": 39,
+    "name": "면세증(I)",
+    "category": 8,
+    "pic_id": 25,
+    "effect_value": 0,
+    "price": 10000,
+    "description": "자국 영토 내에서의 상품 구입에 대한 면세를 승인한 증명서.\n[이탈리아 발행]"
+  },
+  {
+    "id": 40,
+    "name": "면세증(H)",
+    "category": 8,
+    "pic_id": 25,
+    "effect_value": 0,
+    "price": 10000,
+    "description": "자국 영토 내에서의 상품 구입에 대한 면세를 승인한 증명서.\n[네덜란드 발행]"
+  },
+  {
+    "id": 41,
+    "name": "쥐약",
+    "category": 9,
+    "pic_id": 21,
+    "effect_value": 1,
+    "price": 500,
+    "description": "쥐를 퇴치하는 데 쓰이는 독약."
+  },
+  {
+    "id": 42,
+    "name": "성스러운 향유",
+    "category": 9,
+    "pic_id": 22,
+    "effect_value": 1,
+    "price": 1000,
+    "description": "폭풍우를 멎게 하는 기원과 축복을 담아낸 향유."
+  },
+  {
+    "id": 43,
+    "name": "라임 주스",
+    "category": 9,
+    "pic_id": 23,
+    "effect_value": 1,
+    "price": 1000,
+    "description": "장기간의 항해 생활로 인해 발생하는 괴혈병을 치료해 주는 특효약."
+  },
+  {
+    "id": 44,
+    "name": "왕관",
+    "category": 10,
+    "pic_id": 30,
+    "effect_value": 1,
+    "price": 300000,
+    "description": "악숨 왕국의 보물. 순금의 표면에 아름다운 보석들이 장식되어 있다. 그 예술적 가치는 이루 말할 수 없을 만큼 높다."
+  },
+  {
+    "id": 45,
+    "name": "공백",
+    "category": 9,
+    "pic_id": 42,
+    "effect_value": 0,
+    "price": 0,
+    "description": "예비"
+  },
+  {
+    "id": 46,
+    "name": "속죄상",
+    "category": 9,
+    "pic_id": 42,
+    "effect_value": 0,
+    "price": 0,
+    "description": "예비"
+  },
+  {
+    "id": 47,
+    "name": "면죄부",
+    "category": 9,
+    "pic_id": 42,
+    "effect_value": 0,
+    "price": 0,
+    "description": "예비"
+  },
+  {
+    "id": 48,
+    "name": "공백",
+    "category": 9,
+    "pic_id": 42,
+    "effect_value": 0,
+    "price": 0,
+    "description": "예비"
+  },
+  {
+    "id": 49,
+    "name": "공백",
+    "category": 9,
+    "pic_id": 42,
+    "effect_value": 0,
+    "price": 0,
+    "description": "예비"
+  },
+  {
+    "id": 50,
+    "name": "비단 숄",
+    "category": 10,
+    "pic_id": 32,
+    "effect_value": 3,
+    "price": 3000,
+    "description": "키타이에서 만든, 비단으로 이루어진 부드러운 숄."
+  },
+  {
+    "id": 51,
+    "name": "키타이 의상",
+    "category": 10,
+    "pic_id": 33,
+    "effect_value": 8,
+    "price": 8000,
+    "description": "아름다운 비단으로 짠 중국 전통의상."
+  },
+  {
+    "id": 52,
+    "name": "은제 머리장식",
+    "category": 10,
+    "pic_id": 38,
+    "effect_value": 5,
+    "price": 5000,
+    "description": "섬세하고 아름다운 조각이 장식된 은제 머리관."
+  },
+  {
+    "id": 53,
+    "name": "백금 머리빗",
+    "category": 10,
+    "pic_id": 34,
+    "effect_value": 10,
+    "price": 10000,
+    "description": "아름다운 양각이 돋보이는 은백색 재질의 머리빗."
+  },
+  {
+    "id": 54,
+    "name": "담비털 가운",
+    "category": 10,
+    "pic_id": 27,
+    "effect_value": 12,
+    "price": 12000,
+    "description": "최고급 모피 옷. 흰담비는 북유럽에서만 서식하므로, 매우 진귀한 재질로 만든 의류이다."
+  },
+  {
+    "id": 55,
+    "name": "장식고리관",
+    "category": 10,
+    "pic_id": 35,
+    "effect_value": 4,
+    "price": 4000,
+    "description": "중앙 정면에 장인이 세공한 청옥석을 꼼꼼히 박아 넣은 아름다운 머리 장식."
+  },
+  {
+    "id": 56,
+    "name": "공작 깃털 부채",
+    "category": 10,
+    "pic_id": 36,
+    "effect_value": 3,
+    "price": 3000,
+    "description": "매우 화려한 공작 깃털로 만든 장식용 부채."
+  },
+  {
+    "id": 57,
+    "name": "비단 옷감",
+    "category": 10,
+    "pic_id": 37,
+    "effect_value": 2,
+    "price": 1000,
+    "description": "광택이 나면서, 아름다운 무늬가 수놓아져 있는 고급 옷감."
+  },
+  {
+    "id": 58,
+    "name": "우단 가운",
+    "category": 10,
+    "pic_id": 27,
+    "effect_value": 5,
+    "price": 5000,
+    "description": "매우 고운 올이 특징이며, 옷 촉감이 부드럽고 화려한 고급 의류."
+  },
+  {
+    "id": 59,
+    "name": "금강석 왕관",
+    "category": 11,
+    "pic_id": 30,
+    "effect_value": 100,
+    "price": 100000,
+    "description": "정중앙에 아름답게 세공된 금강석이 박혀 있는 왕관."
+  },
+  {
+    "id": 60,
+    "name": "진주 팔찌",
+    "category": 11,
+    "pic_id": 28,
+    "effect_value": 10,
+    "price": 10000,
+    "description": "남양에서만 채집되는 굵은 흑진주로 만든 팔찌."
+  },
+  {
+    "id": 61,
+    "name": "홍옥석 지팡이",
+    "category": 11,
+    "pic_id": 39,
+    "effect_value": 50,
+    "price": 50000,
+    "description": "선단에 달걀만 한 크기의 진홍빛 홍옥석이 장식되어 있는 단장."
+  },
+  {
+    "id": 62,
+    "name": "은촛대",
+    "category": 11,
+    "pic_id": 40,
+    "effect_value": 3,
+    "price": 3000,
+    "description": "순백색의 매끄러운 표면을 자랑하는 은제 촛대."
+  },
+  {
+    "id": 63,
+    "name": "비취 보석 상자",
+    "category": 11,
+    "pic_id": 31,
+    "effect_value": 20,
+    "price": 20000,
+    "description": "비취를 공들여 깎아 만든 작은 상자."
+  },
+  {
+    "id": 64,
+    "name": "보관",
+    "category": 11,
+    "pic_id": 30,
+    "effect_value": 60,
+    "price": 50000,
+    "description": "정밀한 세공을 거친 순금제 왕관."
+  },
+  {
+    "id": 65,
+    "name": "금팔찌",
+    "category": 11,
+    "pic_id": 28,
+    "effect_value": 15,
+    "price": 15000,
+    "description": "매끈한 순금 표면에 정밀한 무늬를 부각한 팔찌."
+  },
+  {
+    "id": 66,
+    "name": "청옥석 반지",
+    "category": 11,
+    "pic_id": 29,
+    "effect_value": 20,
+    "price": 18000,
+    "description": "눈부신 최상급의 청옥석이 박혀 있는 반지."
+  },
+  {
+    "id": 67,
+    "name": "공작석 상자",
+    "category": 11,
+    "pic_id": 31,
+    "effect_value": 10,
+    "price": 8000,
+    "description": "공작석을 공들여 깎아 만든 작은 상자."
+  },
+  {
+    "id": 68,
+    "name": "백금 브로치",
+    "category": 11,
+    "pic_id": 41,
+    "effect_value": 20,
+    "price": 20000,
+    "description": "백금의 몸체 위로 수없이 정교한 무늬가 아로새겨진 의복 치장품."
+  },
+  {
+    "id": 69,
+    "name": "청금석 반지",
+    "category": 11,
+    "pic_id": 29,
+    "effect_value": 25,
+    "price": 22000,
+    "description": "빛나는 표면 속에 신비로운 무늬를 한 최상급 청금석이 장식된 반지."
+  },
+  {
+    "id": 70,
+    "name": "１０６",
+    "category": 13,
+    "pic_id": 22,
+    "effect_value": 0,
+    "price": 0,
+    "description": "발모제. 코펜하겐의 모리스 백작에게 수색을 의뢰받은 약품이다."
+  },
+  {
+    "id": 71,
+    "name": "벤다데칸",
+    "category": 13,
+    "pic_id": 22,
+    "effect_value": 0,
+    "price": 0,
+    "description": "발모제. 코펜하겐의 모리스 백작에게 수색을 의뢰받은 약품이다."
+  },
+  {
+    "id": 72,
+    "name": "착세스",
+    "category": 13,
+    "pic_id": 22,
+    "effect_value": 0,
+    "price": 0,
+    "description": "발모제. 코펜하겐의 모리스 백작에게 수색을 의뢰받은 약품이다."
+  },
+  {
+    "id": 73,
+    "name": "무라마사",
+    "category": 2,
+    "pic_id": 7,
+    "effect_value": 40,
+    "price": 380000,
+    "description": "무로마치 시대의 도검 장인 무라마사가 제작한 명도. 그 만듦새와 예리함은 이루 말할 수 없이 뛰어나다."
+  },
+  {
+    "id": 74,
+    "name": "룬검",
+    "category": 0,
+    "pic_id": 2,
+    "effect_value": 40,
+    "price": 360000,
+    "description": "신성한 룬 문자가 새겨진 검. 룬 마력이 담겨 있다는 전설의 검으로, 그 강도와 아름다움은 비할 데 없을 정도이다."
+  },
+  {
+    "id": 75,
+    "name": "성기사의 갑옷",
+    "category": 6,
+    "pic_id": 14,
+    "effect_value": 70,
+    "price": 600000,
+    "description": "명장 갑주사 몬타기누스가 포르투갈 영웅왕 아폰수를 위해 제작한 갑옷. 어떠한 공격도 막아낼 수 있다는 최고의 방어구이다."
+  },
+  {
+    "id": 76,
+    "name": "성기사의 검",
+    "category": 1,
+    "pic_id": 4,
+    "effect_value": 40,
+    "price": 380000,
+    "description": "명장 도검사 미켈란젤로가 혼신의 힘을 담아 벼려낸 명검. 꿰뚫지 못하는 것이 없었다고 전해지는 최고의 무기이다."
+  },
+  {
+    "id": 77,
+    "name": "시바의 마검",
+    "category": 2,
+    "pic_id": 6,
+    "effect_value": 30,
+    "price": 280000,
+    "description": "파괴신 시바의 힘을 봉해 넣은 곡선형 검. 위력적인 베기 공격을 자랑한다."
+  },
+  {
+    "id": 78,
+    "name": "에롤의 갑옷",
+    "category": 6,
+    "pic_id": 13,
+    "effect_value": 55,
+    "price": 300000,
+    "description": "코펜하겐 명갑주사 에롤이 최고의 기술력으로 제작한 경장 판금 갑옷. 최상급의 방어력과 활동성을 겸비한 방어구로 유명하다."
+  },
+  {
+    "id": 79,
+    "name": "예비",
+    "category": 9,
+    "pic_id": 42,
+    "effect_value": 0,
+    "price": 0,
+    "description": "예비"
+  },
+  {
+    "id": 80,
+    "name": "가면의 지도",
+    "category": 12,
+    "pic_id": 26,
+    "effect_value": 0,
+    "price": 0,
+    "description": "보물이 묻혀 있는 장소가 표시된 지도.\n×：순금 가면"
+  },
+  {
+    "id": 81,
+    "name": "제단의 지도",
+    "category": 12,
+    "pic_id": 26,
+    "effect_value": 0,
+    "price": 0,
+    "description": "보물이 묻혀 있는 장소가 표시된 지도.\n×：비취옥 제단"
+  },
+  {
+    "id": 82,
+    "name": "조각상의 지도",
+    "category": 12,
+    "pic_id": 26,
+    "effect_value": 0,
+    "price": 0,
+    "description": "보물이 묻혀 있는 장소가 표시된 지도.\n×：고대신의 조각상"
+  },
+  {
+    "id": 83,
+    "name": "석판의 지도",
+    "category": 12,
+    "pic_id": 26,
+    "effect_value": 0,
+    "price": 0,
+    "description": "보물이 묻혀 있는 장소가 표시된 지도.\n×：흑요석 석판"
+  },
+  {
+    "id": 84,
+    "name": "수정구슬의 지도",
+    "category": 12,
+    "pic_id": 26,
+    "effect_value": 0,
+    "price": 0,
+    "description": "보물이 묻혀 있는 장소가 표시된 지도.\n×：암흑신의 수정구슬"
+  },
+  {
+    "id": 85,
+    "name": "항아리의 지도",
+    "category": 12,
+    "pic_id": 26,
+    "effect_value": 0,
+    "price": 0,
+    "description": "보물이 묻혀 있는 장소가 표시된 지도.\n×：불 뿜는 항아리"
+  },
+  {
+    "id": 86,
+    "name": "보검의 지도",
+    "category": 12,
+    "pic_id": 26,
+    "effect_value": 0,
+    "price": 0,
+    "description": "보물이 묻혀 있는 장소가 표시된 지도.\n×：파괴신의 보검"
+  },
+  {
+    "id": 87,
+    "name": "메달의 지도",
+    "category": 12,
+    "pic_id": 26,
+    "effect_value": 0,
+    "price": 0,
+    "description": "보물이 묻혀 있는 장소가 표시된 지도.\n×：황금 메달"
+  },
+  {
+    "id": 88,
+    "name": "지팡이의 지도",
+    "category": 12,
+    "pic_id": 26,
+    "effect_value": 0,
+    "price": 0,
+    "description": "보물이 묻혀 있는 장소가 표시된 지도.\n×：성자의 지팡이"
+  },
+  {
+    "id": 89,
+    "name": "낡은 지도",
+    "category": 12,
+    "pic_id": 26,
+    "effect_value": 0,
+    "price": 0,
+    "description": "예비"
+  },
+  {
+    "id": 90,
+    "name": "순금 가면",
+    "category": 13,
+    "pic_id": 42,
+    "effect_value": 0,
+    "price": 0,
+    "description": "２０００년 전 멸망한 고대 왕국에서 제사에 사용했을 것으로 추정되는 금 가면. 당시의 문화상을 엿볼 수 있다."
+  },
+  {
+    "id": 91,
+    "name": "비취옥 제단",
+    "category": 13,
+    "pic_id": 31,
+    "effect_value": 0,
+    "price": 0,
+    "description": "한 변이 ３０센티미터 정도 되는, 비취로 제작된 소형 제단. 중심부에는 제물의 심장을 담아 두는 웅덩이가 있다."
+  },
+  {
+    "id": 92,
+    "name": "고대신의 조각상",
+    "category": 13,
+    "pic_id": 42,
+    "effect_value": 0,
+    "price": 0,
+    "description": "약 ４０센티미터 높이에, 기묘한 모습을 한 조각상. 세 개의 눈이 있어서, 각각 홍옥석, 청옥석, 금강석이 박혀 있다."
+  },
+  {
+    "id": 93,
+    "name": "흑요석 석판",
+    "category": 13,
+    "pic_id": 42,
+    "effect_value": 0,
+    "price": 0,
+    "description": "반투명한 칠흑색의 석판. 표면에 고대 문자가 새겨져 있지만, 판독하기 어렵다. 아마도 주술적인 내용이지 않을까 추정된다."
+  },
+  {
+    "id": 94,
+    "name": "암흑신의 수정구슬",
+    "category": 13,
+    "pic_id": 42,
+    "effect_value": 0,
+    "price": 0,
+    "description": "직경이 ２０센티미터가량 되며, 중앙에 푸른 기운을 띠는 수정구슬. 점복술에 사용되었을 가능성이 가장 높다."
+  },
+  {
+    "id": 95,
+    "name": "불 뿜는 항아리",
+    "category": 13,
+    "pic_id": 42,
+    "effect_value": 0,
+    "price": 0,
+    "description": "불꽃 모양의 무늬가 새겨진 고대의 토기. 매우 두껍고 흑갈색이다."
+  },
+  {
+    "id": 96,
+    "name": "파괴신의 보검",
+    "category": 13,
+    "pic_id": 4,
+    "effect_value": 0,
+    "price": 0,
+    "description": "흑요석의 칼날에, 보석이 박힌 황금 칼자루가 특징인 장식용 검."
+  },
+  {
+    "id": 97,
+    "name": "황금 메달",
+    "category": 13,
+    "pic_id": 42,
+    "effect_value": 0,
+    "price": 0,
+    "description": "황금경 엘도라도의 존재를 암시하는 황금패. 표면에 잉카풍 기법이 돋보이는, 신의 얼굴을 표현한 양각이 새겨져 있다."
+  },
+  {
+    "id": 98,
+    "name": "성자의 지팡이",
+    "category": 13,
+    "pic_id": 39,
+    "effect_value": 0,
+    "price": 0,
+    "description": "악숨 왕국의 상징. 신 악숨 왕국을 세우기 위해 반드시 필요한 보물이며, 항해자 조안이 발견을 의뢰했다."
+  },
+  {
+    "id": 99,
+    "name": "최후의 보물",
+    "category": 13,
+    "pic_id": 42,
+    "effect_value": 0,
+    "price": 0,
+    "description": "예비"
+  }
+]

@@ -1,0 +1,23 @@
+# Original DOS game files (Copyright Koei) - do not commit original game
+DOS/
+
+# Binaries & Large Archives (>100MB GitHub limit)
+Godot_v4.3-stable_linux.x86_64
+godot4.zip
+*.zip
+*.tar.gz
+
+# Godot 4 cache & temporary files
+.godot/
+*.translation
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Temporary / OS files
+.DS_Store
+Thumbs.db
+*.swp
+*~
