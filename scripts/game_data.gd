@@ -232,10 +232,10 @@ func _load_all_data() -> void:
 	portmaps_bundle = FileAccess.get_file_as_bytes("res://data/portmaps_bundle.bin")
 	windcur_data = FileAccess.get_file_as_bytes("res://data/windcur.bin")
 
-	kao_large_atlas = _load_png_texture("res://assets/portraits/kao_large_atlas.png")
-	kao_small_atlas = _load_png_texture("res://assets/portraits/kao_small_atlas.png")
-	ship_sprites_tex = _load_png_texture("res://assets/sprites/worldmap_ships.png")
-	hangul_font_tex = _load_png_texture("res://assets/fonts/all_font_16p_atlas.png")
+	kao_large_atlas = _load_texture("res://assets/portraits/kao_large_atlas.png")
+	kao_small_atlas = _load_texture("res://assets/portraits/kao_small_atlas.png")
+	ship_sprites_tex = _load_texture("res://assets/sprites/worldmap_ships.png")
+	hangul_font_tex = _load_texture("res://assets/fonts/all_font_16p_atlas.png")
 
 	if ResourceLoader.exists("res://assets/fonts/korean_font.ttf"):
 		korean_font = load("res://assets/fonts/korean_font.ttf") as FontFile
@@ -248,14 +248,14 @@ func _load_all_data() -> void:
 		korean_font.subpixel_positioning = TextServer.SUBPIXEL_POSITIONING_AUTO
 
 	for i in range(7):
-		char_sprite_textures[i] = _load_png_texture("res://assets/sprites/char_%d.png" % i)
+		char_sprite_textures[i] = _load_texture("res://assets/sprites/char_%d.png" % i)
 		for tod in ["day", "dusk", "night"]:
-			port_tileset_textures["%d_%s" % [i, tod]] = _load_png_texture(
+			port_tileset_textures["%d_%s" % [i, tod]] = _load_texture(
 				"res://assets/tilesets/port_tileset_%d_%s.png" % [i, tod]
 			)
 
 	for tod in ["day", "dawn", "dusk", "night", "storm"]:
-		worldmap_tileset_textures[tod] = _load_png_texture(
+		worldmap_tileset_textures[tod] = _load_texture(
 			"res://assets/tilesets/worldmap_tiles_%s.png" % tod
 		)
 
@@ -265,7 +265,7 @@ func _load_all_data() -> void:
 		"guild", "mansion", "bank", "item_shop", "church", "fortune"
 	]
 	for iname in interior_names:
-		var tex := _load_png_texture("res://assets/graphics/interior_%s.png" % iname)
+		var tex := _load_texture("res://assets/graphics/interior_%s.png" % iname)
 		if tex != null:
 			building_interior_textures[iname] = tex
 
@@ -281,15 +281,22 @@ func _load_all_data() -> void:
 	]
 	for b_name in bgm_names:
 		var mp3_path := "res://assets/audio/bgm_%s.mp3" % b_name
-		if FileAccess.file_exists(mp3_path):
+		if ResourceLoader.exists(mp3_path):
+			var stream = load(mp3_path)
+			if stream is AudioStreamMP3:
+				stream.loop = (b_name != "ending" and b_name != "inn")
+			audio_streams["bgm_" + b_name] = stream
+		elif FileAccess.file_exists(mp3_path):
 			var mp3 := AudioStreamMP3.new()
 			mp3.data = FileAccess.get_file_as_bytes(mp3_path)
-			mp3.loop = true
+			mp3.loop = (b_name != "ending" and b_name != "inn")
 			audio_streams["bgm_" + b_name] = mp3
 
 	for s_name in ["cannon", "sword"]:
 		var wav_path := "res://assets/audio/sfx_%s.wav" % s_name
-		if FileAccess.file_exists(wav_path):
+		if ResourceLoader.exists(wav_path):
+			audio_streams["sfx_" + s_name] = load(wav_path)
+		elif FileAccess.file_exists(wav_path):
 			var wav_bytes := FileAccess.get_file_as_bytes(wav_path)
 			var wav := AudioStreamWAV.new()
 			wav.data = wav_bytes.slice(44)
@@ -298,7 +305,12 @@ func _load_all_data() -> void:
 			wav.loop_mode = AudioStreamWAV.LOOP_DISABLED
 			audio_streams["sfx_" + s_name] = wav
 
-	if FileAccess.file_exists("res://assets/audio/sfx_fanfare.mp3"):
+	if ResourceLoader.exists("res://assets/audio/sfx_fanfare.mp3"):
+		var fanfare = load("res://assets/audio/sfx_fanfare.mp3")
+		if fanfare is AudioStreamMP3:
+			fanfare.loop = false
+		audio_streams["sfx_fanfare"] = fanfare
+	elif FileAccess.file_exists("res://assets/audio/sfx_fanfare.mp3"):
 		var fanfare := AudioStreamMP3.new()
 		fanfare.data = FileAccess.get_file_as_bytes("res://assets/audio/sfx_fanfare.mp3")
 		fanfare.loop = false
@@ -310,10 +322,13 @@ func play_bgm(bgm_key: String) -> void:
 		return
 	current_bgm_key = bgm_key
 	var stream: AudioStream = audio_streams.get("bgm_" + bgm_key)
-	if stream != null and current_bgm_player.stream != stream:
-		current_bgm_player.stop()
-		current_bgm_player.stream = stream
-		current_bgm_player.play()
+	if stream != null:
+		if current_bgm_player.stream != stream:
+			current_bgm_player.stop()
+			current_bgm_player.stream = stream
+			current_bgm_player.play()
+		elif not current_bgm_player.playing:
+			current_bgm_player.play()
 
 
 func stop_bgm() -> void:
@@ -352,20 +367,23 @@ func _load_json(path: String) -> Variant:
 	return JSON.parse_string(text)
 
 
+func _load_texture(path: String) -> Texture2D:
+	if ResourceLoader.exists(path):
+		var res = load(path)
+		if res is Texture2D:
+			return res
+	if FileAccess.file_exists(path):
+		var bytes := FileAccess.get_file_as_bytes(path)
+		if not bytes.is_empty():
+			var img := Image.new()
+			if img.load_png_from_buffer(bytes) == OK and not img.is_empty():
+				return ImageTexture.create_from_image(img)
+	push_error("Failed to load texture: " + path)
+	return null
+
+
 func _load_png_texture(path: String) -> Texture2D:
-	if not FileAccess.file_exists(path):
-		push_error("File not found: " + path)
-		return null
-	var bytes := FileAccess.get_file_as_bytes(path)
-	if bytes.is_empty():
-		push_error("Empty PNG file: " + path)
-		return null
-	var img := Image.new()
-	var err := img.load_png_from_buffer(bytes)
-	if err != OK or img.is_empty():
-		push_error("Failed to load PNG buffer: " + path)
-		return null
-	return ImageTexture.create_from_image(img)
+	return _load_texture(path)
 
 
 func start_new_game(protag_index: int) -> void:

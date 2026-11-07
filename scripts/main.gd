@@ -1294,6 +1294,15 @@ func _do_load_slot(slot: int) -> void:
 		_set_log_text("[color=#ff7777]불러오기에 실패했습니다.[/color]")
 
 
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseButton or event is InputEventKey:
+		if GameData.current_bgm_player != null and not GameData.current_bgm_player.playing and not GameData.is_audio_muted and not GameData.current_bgm_key.is_empty():
+			var stream: AudioStream = GameData.audio_streams.get("bgm_" + GameData.current_bgm_key)
+			if stream != null:
+				GameData.current_bgm_player.stream = stream
+				GameData.current_bgm_player.play()
+
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.keycode == KEY_F5:
