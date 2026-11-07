@@ -262,7 +262,8 @@ func _load_all_data() -> void:
 	# Load Building Interior Illustrations
 	var interior_names := [
 		"market", "tavern", "shipyard", "harbor", "inn", "palace",
-		"guild", "mansion", "bank", "item_shop", "church", "fortune"
+		"guild", "mansion", "bank", "item_shop", "church", "fortune",
+		"mosque", "barracks", "workshop", "waitress"
 	]
 	for iname in interior_names:
 		var tex := _load_texture("res://assets/graphics/interior_%s.png" % iname)

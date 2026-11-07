@@ -157,11 +157,11 @@ func _run_tests() -> void:
 	main_node._open_market_menu("리스본")
 	await process_frame
 	await _save_screenshot("autotest_market_modal.png")
-	if not main_node.modal_portrait.visible:
-		push_error("Market portrait is not visible in modal!")
+	if not (main_node.modal_portrait.visible or main_node.modal_interior_rect.visible):
+		push_error("Market visual (interior/portrait) is not visible in modal!")
 		quit(1)
 		return
-	print("  [PASS] Market modal portrait verified.")
+	print("  [PASS] Market modal interior/portrait verified.")
 	main_node._invest_market("리스본", 500)
 	await process_frame
 	main_node._close_modal()
@@ -170,18 +170,59 @@ func _run_tests() -> void:
 	main_node._open_tavern_menu("리스본")
 	await process_frame
 	await _save_screenshot("autotest_tavern_interior.png")
-	if not main_node.modal_portrait.visible:
-		push_error("Tavern portrait is not visible in modal!")
+	if not (main_node.modal_portrait.visible or main_node.modal_interior_rect.visible):
+		push_error("Tavern visual (interior/portrait) is not visible in modal!")
 		quit(1)
 		return
-	print("  [PASS] Tavern modal portrait verified.")
+	print("  [PASS] Tavern modal interior/portrait verified.")
 	main_node._gift_waitress("리스본", 105, 50)
 	await process_frame
 	main_node._play_blackjack_round("리스본", 50)
 	await process_frame
 	main_node._close_modal()
 
-	# 3c. Test Shipyard: Figureheads, Cannons Remodel, & Industrial Investment
+	# 3c. Test Living Town Wandering NPCs & Dialogue System
+	if main_node.port_view.npcs.size() < 6:
+		push_error("Living town NPCs were not spawned! Count=" + str(main_node.port_view.npcs.size()))
+		quit(1)
+		return
+	var sample_npc: Dictionary = main_node.port_view.npcs[0]
+	print("  [PASS] Living Port NPCs verified: %d wandering NPCs spawned (Sample: '%s' at (%d, %d))" % [
+		main_node.port_view.npcs.size(), sample_npc.get("name", ""), sample_npc.get("x", 0), sample_npc.get("y", 0)
+	])
+	main_node._on_npc_interacted(sample_npc)
+	if not main_node.log_typewriter_active:
+		push_error("Log typewriter was not activated on NPC interaction!")
+		quit(1)
+		return
+	print("  [PASS] NPC Interactive Dialogue with typewriter effect verified.")
+
+	# 3d. Test Building Interior Illustration & Progressive Typewriter Dialogue
+	main_node._open_market_menu("리스본")
+	await process_frame
+	if not main_node.modal_interior_rect.visible or main_node.modal_interior_rect.texture == null:
+		push_error("Building interior illustration is missing or not visible in Market modal!")
+		quit(1)
+		return
+	if not main_node.typewriter_active:
+		push_error("Typewriter dialogue effect is not active upon opening building modal!")
+		quit(1)
+		return
+	print("  [PASS] Authentic 136x112 Building Interior Illustration & Typewriter Dialogue verified.")
+
+	# Simulate Space/Enter key to instantly complete typewriter dialogue
+	var ev := InputEventKey.new()
+	ev.keycode = KEY_SPACE
+	ev.pressed = true
+	main_node._input(ev)
+	if main_node.typewriter_active or main_node.modal_body.visible_characters != -1:
+		push_error("Typewriter did not finish on Space keypress!")
+		quit(1)
+		return
+	print("  [PASS] Typewriter dialogue instant-advance on keypress verified.")
+	main_node._close_modal()
+
+	# 3e. Test Shipyard: Figureheads, Cannons Remodel, & Industrial Investment
 	gd.gold_coins += 30000 # Grant test gold for ship remodeling and investments
 	main_node._open_shipyard_menu("리스본")
 	await process_frame

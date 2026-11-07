@@ -23,11 +23,18 @@ var fleet_label: Label
 var wind_label: Label
 var bottom_log_label: RichTextLabel
 var modal_layer: PanelContainer
+var modal_interior_rect: TextureRect
 var modal_portrait: TextureRect
 var modal_title: Label
 var modal_body: RichTextLabel
+var modal_prompt_label: Label
 var modal_buttons_box: VBoxContainer
 var title_overlay: PanelContainer
+var typewriter_active: bool = false
+var typewriter_elapsed: float = 0.0
+var typewriter_speed: float = 0.02
+var log_typewriter_active: bool = false
+var log_typewriter_elapsed: float = 0.0
 
 # Active Naval Battle & 1:1 Captain Duel State
 var active_battle_enemy: Dictionary = {}
@@ -75,6 +82,7 @@ func _build_ui() -> void:
 
 	port_view = PortViewScript.new()
 	port_view.building_entered.connect(_on_building_entered)
+	port_view.npc_interacted.connect(_on_npc_interacted)
 	viewport_frame.add_child(port_view)
 
 	world_map_view = WorldMapScript.new()
@@ -158,26 +166,36 @@ func _build_ui() -> void:
 
 	# 4. Modal Dialog Overlay (For Buildings, Market, Shipyard, Tavern, Discoveries)
 	modal_layer = PanelContainer.new()
-	modal_layer.position = Vector2(28, 24)
-	modal_layer.size = Vector2(408, 304)
+	modal_layer.position = Vector2(16, 16)
+	modal_layer.size = Vector2(428, 320)
 	modal_layer.visible = false
 	add_child(modal_layer)
 
 	var modal_hbox := HBoxContainer.new()
-	modal_hbox.add_theme_constant_override("separation", 10)
+	modal_hbox.add_theme_constant_override("separation", 12)
 	modal_layer.add_child(modal_hbox)
 
 	var left_col := VBoxContainer.new()
-	left_col.custom_minimum_size = Vector2(80, 260)
+	left_col.custom_minimum_size = Vector2(136, 280)
+	left_col.add_theme_constant_override("separation", 6)
 	modal_hbox.add_child(left_col)
+
+	modal_interior_rect = TextureRect.new()
+	modal_interior_rect.custom_minimum_size = Vector2(136, 112)
+	modal_interior_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	modal_interior_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	modal_interior_rect.visible = false
+	left_col.add_child(modal_interior_rect)
 
 	modal_portrait = TextureRect.new()
 	modal_portrait.custom_minimum_size = Vector2(64, 80)
 	modal_portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	modal_portrait.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	modal_portrait.visible = true
 	left_col.add_child(modal_portrait)
 
 	modal_buttons_box = VBoxContainer.new()
-	modal_buttons_box.custom_minimum_size = Vector2(100, 170)
+	modal_buttons_box.custom_minimum_size = Vector2(136, 140)
 	modal_buttons_box.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	left_col.add_child(modal_buttons_box)
 
@@ -186,7 +204,7 @@ func _build_ui() -> void:
 	modal_hbox.add_child(right_col)
 
 	modal_title = Label.new()
-	modal_title.add_theme_font_size_override("font_size", 15)
+	modal_title.add_theme_font_size_override("font_size", 14)
 	modal_title.add_theme_color_override("font_color", Color(1.0, 0.9, 0.35))
 	right_col.add_child(modal_title)
 
@@ -195,6 +213,14 @@ func _build_ui() -> void:
 	modal_body.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	modal_body.add_theme_font_size_override("normal_font_size", 12)
 	right_col.add_child(modal_body)
+
+	modal_prompt_label = Label.new()
+	modal_prompt_label.text = "▼ [Enter / Space / 클릭]"
+	modal_prompt_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	modal_prompt_label.add_theme_font_size_override("font_size", 11)
+	modal_prompt_label.add_theme_color_override("font_color", Color(1.0, 0.85, 0.35))
+	modal_prompt_label.visible = false
+	right_col.add_child(modal_prompt_label)
 
 	# 5. Title / Protagonist Selection Screen Overlay
 	title_overlay = PanelContainer.new()
@@ -410,19 +436,46 @@ func _refresh_hud() -> void:
 
 func _set_log_text(bbcode: String) -> void:
 	bottom_log_label.text = bbcode
+	bottom_log_label.visible_characters = 0
+	log_typewriter_active = true
+	log_typewriter_elapsed = 0.0
+
+
+func _on_npc_interacted(npc: Dictionary) -> void:
+	var dlgs: Array = npc.get("dialogues", [])
+	if dlgs.is_empty():
+		return
+	var line: String = dlgs[randi() % dlgs.size()]
+	_set_log_text("[color=#ffd866]【%s】[/color] \"%s\"" % [npc.get("name", "시민"), line])
 
 
 # ==============================================================================
 # Building Interaction & Modal Menus
 # ==============================================================================
-func _open_modal(title: String, kao_id: int, body_bbcode: String, actions: Array, _unused_key: String = "") -> void:
+func _open_modal(title: String, kao_id: int, body_bbcode: String, actions: Array, building_key: String = "") -> void:
 	modal_layer.visible = true
 	port_view.is_modal_open = true
 	world_map_view.is_modal_open = true
 	modal_title.text = title
-	modal_portrait.texture = GameData.get_portrait_atlas_texture(kao_id)
-	modal_body.text = body_bbcode
 
+	# 1. Building Interior Illustration vs Character Portrait
+	if building_key != "" and GameData.building_interior_textures.has(building_key):
+		modal_interior_rect.texture = GameData.building_interior_textures[building_key]
+		modal_interior_rect.visible = true
+		modal_portrait.visible = false
+	else:
+		modal_interior_rect.visible = false
+		modal_portrait.texture = GameData.get_portrait_atlas_texture(kao_id)
+		modal_portrait.visible = true
+
+	# 2. Progressive Typewriter Dialogue Effect
+	modal_body.text = body_bbcode
+	modal_body.visible_characters = 0
+	typewriter_active = true
+	typewriter_elapsed = 0.0
+	modal_prompt_label.visible = false
+
+	# 3. Action Buttons
 	for c in modal_buttons_box.get_children():
 		c.queue_free()
 
@@ -436,6 +489,7 @@ func _open_modal(title: String, kao_id: int, body_bbcode: String, actions: Array
 
 func _close_modal() -> void:
 	modal_layer.visible = false
+	typewriter_active = false
 	if current_mode == GameMode.PORT:
 		GameData.play_port_bgm(GameData.current_port_id)
 		port_view.is_modal_open = false
@@ -499,7 +553,8 @@ func _show_scenario_result_modal(trig: Dictionary, res: Dictionary, b_info: Dict
 		"%s - %s (시나리오 이벤트)" % [pname, bname],
 		portrait_id,
 		lines_bb,
-		actions
+		actions,
+		b_info.get("id", "")
 	)
 
 
@@ -707,7 +762,7 @@ func _open_tavern_waitress(pname: String, waitress_kao: int) -> void:
 		{"label": "진귀한 보석 선물 (200닢)", "callback": _gift_waitress.bind(pname, waitress_kao, 200)},
 		{"label": "주점 메인으로", "callback": _open_tavern_menu.bind(pname)}
 	]
-	_open_modal("%s 주점 여급" % pname, waitress_kao, body, actions, "tavern")
+	_open_modal("%s 주점 여급" % pname, waitress_kao, body, actions, "waitress")
 
 
 func _gift_waitress(pname: String, waitress_kao: int, cost: int) -> void:
@@ -1294,6 +1349,33 @@ func _do_load_slot(slot: int) -> void:
 		_set_log_text("[color=#ff7777]불러오기에 실패했습니다.[/color]")
 
 
+func _process(delta: float) -> void:
+	if typewriter_active:
+		typewriter_elapsed += delta
+		var chars := int(typewriter_elapsed / typewriter_speed)
+		var total_chars := modal_body.get_total_character_count()
+		if chars >= total_chars:
+			modal_body.visible_characters = -1
+			typewriter_active = false
+			modal_prompt_label.visible = true
+		else:
+			modal_body.visible_characters = chars
+
+	if modal_prompt_label.visible:
+		var blink := int(Time.get_ticks_msec() / 400) % 2 == 0
+		modal_prompt_label.modulate.a = 1.0 if blink else 0.25
+
+	if log_typewriter_active:
+		log_typewriter_elapsed += delta
+		var lchars := int(log_typewriter_elapsed / typewriter_speed)
+		var ltotal := bottom_log_label.get_total_character_count()
+		if lchars >= ltotal:
+			bottom_log_label.visible_characters = -1
+			log_typewriter_active = false
+		else:
+			bottom_log_label.visible_characters = lchars
+
+
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton or event is InputEventKey:
 		if GameData.current_bgm_player != null and not GameData.current_bgm_player.playing and not GameData.is_audio_muted and not GameData.current_bgm_key.is_empty():
@@ -1301,6 +1383,18 @@ func _input(event: InputEvent) -> void:
 			if stream != null:
 				GameData.current_bgm_player.stream = stream
 				GameData.current_bgm_player.play()
+
+	if typewriter_active and event.is_pressed():
+		if (event is InputEventKey and event.keycode in [KEY_SPACE, KEY_ENTER, KEY_Z]) or event is InputEventMouseButton:
+			modal_body.visible_characters = -1
+			typewriter_active = false
+			modal_prompt_label.visible = true
+			get_viewport().set_input_as_handled()
+			return
+
+	if log_typewriter_active and event.is_pressed():
+		bottom_log_label.visible_characters = -1
+		log_typewriter_active = false
 
 
 func _unhandled_input(event: InputEvent) -> void:

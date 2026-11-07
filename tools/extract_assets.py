@@ -966,98 +966,159 @@ def extract_scenarios_and_messages(dos_dir: Path, ports: list[dict]) -> tuple[di
 # ==============================================================================
 # 8. Korean Font (ALL_FONT.16P & HANKAKU.FNT) Extraction
 # ==============================================================================
-def decode_koei_4pixel_image(raw: bytes) -> tuple[int, int, list[int]]:
-    """Decodes Koei 4-pixel LZ+RLE compressed images from GRAPH.DAT (MAIN.EXE:0x063c6)."""
-    if len(raw) < 20:
+def unpack_koei_4pixel_word(word: int) -> list[int]:
+    """Unpacks a 16-bit Koei word into 4 planar 4-bit palette indices."""
+    bl = word & 0xFF
+    bh = (word >> 8) & 0xFF
+    res = []
+    for k in range(4):
+        s = 3 - k
+        b0 = (bl >> s) & 1
+        b1 = (bl >> (4 + s)) & 1
+        b2 = (bh >> s) & 1
+        b3 = (bh >> (4 + s)) & 1
+        res.append(b0 | (b1 << 1) | (b2 << 2) | (b3 << 3))
+    return res
+
+
+def decode_koei_4pixel_image(data: bytes) -> tuple[int, int, list[int]]:
+    """
+    Decodes Koei 4-pixel LZ+RLE compressed images from GRAPH.DAT.
+    Accurately reverse-engineered from MAIN.EXE:0x63c4.
+    """
+    if len(data) < 20:
         return 0, 0, []
-    w = raw[0] | (raw[1] << 8)
-    h = raw[2] | (raw[3] << 8)
+
+    pos = 0
+    def read_byte() -> int:
+        nonlocal pos
+        if pos >= len(data):
+            return 0
+        b = data[pos]
+        pos += 1
+        return b
+
+    w = read_byte() | ((read_byte() & 0x7F) << 8)
+    h = read_byte() | (read_byte() << 8)
     if w <= 0 or h <= 0 or w > 640 or h > 480:
         return 0, 0, []
 
-    dict_patterns = []
-    for i in range(8):
-        v = raw[4 + i * 2] | (raw[5 + i * 2] << 8)
-        p0 = (v >> 12) & 0x0F
-        p1 = (v >> 8) & 0x0F
-        p2 = (v >> 4) & 0x0F
-        p3 = v & 0x0F
-        dict_patterns.append([p0, p1, p2, p3])
+    w_blocks = (w + 3) >> 2
+
+    # 8 16-bit dictionary words
+    dictionary = []
+    for _ in range(8):
+        lo = read_byte()
+        hi = read_byte()
+        dictionary.append(lo | (hi << 8))
+
+    blocks = [0] * (h * w_blocks)
+
+    for y in range(h):
+        rem = w_blocks
+        while rem > 0 and pos < len(data):
+            b = read_byte()
+            cur_block = y * w_blocks + (w_blocks - rem)
+            if (b & 0x80) != 0:
+                count = (b & 0x0F) + 1
+                if count > rem:
+                    count = rem
+                if (b & 0x40) != 0:
+                    # Vertical copy from rows above
+                    row_offset = ((b & 0x30) >> 4) + 1
+                    src_block = (y - row_offset) * w_blocks + (w_blocks - rem)
+                    for i in range(count):
+                        blocks[cur_block + i] = blocks[src_block + i] if (src_block + i >= 0) else 0
+                else:
+                    # Horizontal copy from previous blocks in buffer
+                    block_offset = ((b & 0x30) >> 4) + 1
+                    src_block = cur_block - block_offset
+                    for i in range(count):
+                        blocks[cur_block + i] = blocks[src_block + i] if (src_block + i >= 0) else 0
+                rem -= count
+            else:
+                count = (b & 0x07) + 1
+                if count > rem:
+                    count = rem
+                al = b & 0x78
+                if al == 0:
+                    word = 0
+                elif (al & 0x40) != 0:
+                    idx = (b >> 3) & 0x07
+                    word = dictionary[idx]
+                elif al == 0x38:
+                    b1 = read_byte()
+                    b2 = read_byte()
+                    word = (b1 << 8) | b2
+                else:
+                    table_idx = (al - 8) >> 2
+                    val = read_byte()
+                    if table_idx == 0:
+                        word = val
+                    elif table_idx == 1:
+                        word = (val & 0x0F) | ((val & 0xF0) << 4)
+                    elif table_idx == 2:
+                        word = (val & 0x0F) | ((val & 0xF0) << 8)
+                    elif table_idx == 3:
+                        word = (val << 4) & 0xFFFF
+                    elif table_idx == 4:
+                        word = ((val & 0x0F) << 4) | ((val & 0xF0) << 8)
+                    elif table_idx == 5:
+                        word = val << 8
+                    else:
+                        word = val
+                for i in range(count):
+                    blocks[cur_block + i] = word
+                rem -= count
 
     pixels = [0] * (w * h)
-    pos = 20
-    cur_p = 0
-    total = w * h
-
-    while cur_p < total and pos < len(raw):
-        b = raw[pos]
-        pos += 1
-        if b < 0x80:
-            if (b & 0x40) == 0:
-                if pos >= len(raw):
-                    break
-                b2 = raw[pos]
-                pos += 1
-                offset = ((b >> 4) << 8) | b2
-                count = (b & 0x0F) + 1
-                for _ in range(count):
-                    src_p = cur_p - offset * 4
-                    for i in range(4):
-                        if cur_p < total:
-                            pixels[cur_p] = pixels[src_p + i] if src_p + i >= 0 else 0
-                            cur_p += 1
-            else:
-                count = (b & 0x0F) + 1
-                for _ in range(count):
-                    src_p = cur_p - w
-                    for _k in range(4):
-                        if cur_p < total:
-                            pixels[cur_p] = pixels[src_p] if src_p >= 0 else 0
-                            src_p += 1
-                            cur_p += 1
-        else:
-            rep = (b & 0x07) + 1
-            if (b & 0x40) != 0:
-                d_idx = (b >> 3) & 0x07
-                pat = dict_patterns[d_idx]
-            else:
-                if pos + 1 >= len(raw):
-                    break
-                v = raw[pos] | (raw[pos + 1] << 8)
-                pos += 2
-                pat = [(v >> 12) & 0x0F, (v >> 8) & 0x0F, (v >> 4) & 0x0F, v & 0x0F]
-            for _ in range(rep):
-                for p in pat:
-                    if cur_p < total:
-                        pixels[cur_p] = p
-                        cur_p += 1
+    for y in range(h):
+        for bx in range(w_blocks):
+            word = blocks[y * w_blocks + bx]
+            four = unpack_koei_4pixel_word(word)
+            for k in range(4):
+                px = bx * 4 + k
+                if px < w:
+                    pixels[y * w + px] = four[k]
 
     return w, h, pixels
 
 
 def extract_building_interiors(dos_dir: Path, palettes: dict) -> None:
-    """Extracts all 12 building interior graphics from GRAPH.DAT."""
+    """Extracts all 16 building interior graphics from GRAPH.DAT."""
     graph_bytes = (dos_dir / "GRAPH.DAT").read_bytes()
-    num_entries = graph_bytes[0] | (graph_bytes[1] << 8)
-    offsets = []
-    for i in range(num_entries):
-        offsets.append(graph_bytes[2 + i * 4] | (graph_bytes[3 + i * 4] << 8) | (graph_bytes[4 + i * 4] << 16) | (graph_bytes[5 + i * 4] << 24))
+    first_off = struct.unpack(">I", graph_bytes[:4])[0]
+    num_entries = first_off // 4
+    offsets = [struct.unpack(">I", graph_bytes[i * 4 : i * 4 + 4])[0] for i in range(num_entries)]
     offsets.append(len(graph_bytes))
 
-    interior_keys = [
-        "harbor", "market", "tavern", "shipyard", "inn", "palace",
-        "guild", "bank", "church", "fortune", "item_shop", "mansion"
-    ]
+    mapping = {
+        6: "interior_market.png",
+        7: "interior_tavern.png",
+        8: "interior_shipyard.png",
+        9: "interior_harbor.png",
+        10: "interior_inn.png",
+        11: "interior_palace.png",
+        12: "interior_guild.png",
+        13: "interior_mansion.png",
+        14: "interior_bank.png",
+        15: "interior_item_shop.png",
+        16: "interior_church.png",
+        17: "interior_fortune.png",
+        18: "interior_waitress.png",
+        19: "interior_workshop.png",
+        20: "interior_mosque.png",
+        21: "interior_barracks.png"
+    }
     pal = palettes["day"]
 
-    for idx, key in enumerate(interior_keys):
-        if idx >= num_entries:
-            break
-        raw = graph_bytes[offsets[idx] : offsets[idx + 1]]
-        w, h, px = decode_koei_4pixel_image(raw)
-        if w > 0 and h > 0:
-            out_file = ASSETS_DIR / "graphics" / f"interior_{key}.png"
-            write_png_indexed_as_rgba(out_file, w, h, px, pal)
+    for entry_idx, fname in mapping.items():
+        if entry_idx < len(offsets) - 1:
+            raw = graph_bytes[offsets[entry_idx] : offsets[entry_idx + 1]]
+            w, h, px = decode_koei_4pixel_image(raw)
+            if w > 0 and h > 0:
+                out_file = ASSETS_DIR / "graphics" / fname
+                write_png_indexed_as_rgba(out_file, w, h, px, pal)
 
 
 def extract_korean_font(font_16p_bytes: bytes, hankaku_bytes: bytes) -> None:
