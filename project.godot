@@ -29,6 +29,13 @@ window/size/window_height_override=800
 window/stretch/mode="canvas_items"
 window/stretch/aspect="keep"
 
+[gui]
+
+theme/custom_font="res://assets/fonts/korean_font.ttf"
+theme/default_font_antialiasing=1
+theme/default_font_hinting=1
+theme/default_font_subpixel_positioning=1
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"

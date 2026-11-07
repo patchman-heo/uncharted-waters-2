@@ -237,9 +237,15 @@ func _load_all_data() -> void:
 	ship_sprites_tex = _load_png_texture("res://assets/sprites/worldmap_ships.png")
 	hangul_font_tex = _load_png_texture("res://assets/fonts/all_font_16p_atlas.png")
 
-	if FileAccess.file_exists("res://assets/fonts/korean_font.ttf"):
+	if ResourceLoader.exists("res://assets/fonts/korean_font.ttf"):
+		korean_font = load("res://assets/fonts/korean_font.ttf") as FontFile
+	elif FileAccess.file_exists("res://assets/fonts/korean_font.ttf"):
 		korean_font = FontFile.new()
 		korean_font.data = FileAccess.get_file_as_bytes("res://assets/fonts/korean_font.ttf")
+	if korean_font != null:
+		korean_font.antialiasing = TextServer.FONT_ANTIALIASING_GRAY
+		korean_font.hinting = TextServer.HINTING_NORMAL
+		korean_font.subpixel_positioning = TextServer.SUBPIXEL_POSITIONING_AUTO
 
 	for i in range(7):
 		char_sprite_textures[i] = _load_png_texture("res://assets/sprites/char_%d.png" % i)
